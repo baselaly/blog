@@ -1,6 +1,6 @@
 const Post = require('../models/Post')
 
-const store = (body) => {
+module.exports.store = (body) => {
     const post = new Post({
         title: body.title,
         description: body.description
@@ -9,15 +9,15 @@ const store = (body) => {
     return post.save()
 }
 
-const get = () => {
+module.exports.get = () => {
     return Post.find()
 }
 
-const getById = (id) => {
+module.exports.getById = (id) => {
     return Post.findById(id)
 }
 
-const update = (id, body) => {
+module.exports.update = (id, body) => {
     return Post.updateOne({ _id: id }, {
         $set: {
             title: body.title,
@@ -25,8 +25,3 @@ const update = (id, body) => {
         }
     })
 }
-
-module.exports.store = store
-module.exports.get = get
-module.exports.getById = getById
-module.exports.update = update
