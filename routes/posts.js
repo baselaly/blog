@@ -1,8 +1,9 @@
 const express = require('express')
 const router = express.Router()
 const PostService = require('../services/PostService')
+const authMiddleware = require('../middlewares/auth')
 
-router.post('/', async (req, res) => {
+router.post('/', authMiddleware.auth, async (req, res) => {
     try {
         let body = req.body
         let newPost = await PostService.store(body);
@@ -12,7 +13,7 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.get('/', async (req, res) => {
+router.get('/', authMiddleware.auth, async (req, res) => {
     try {
         let posts = await PostService.get()
         res.json({ posts: posts })
@@ -21,7 +22,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/:postId', async (req, res) => {
+router.get('/:postId', authMiddleware.auth, async (req, res) => {
     try {
         let id = req.params.postId
         const post = await PostService.getById(id)
@@ -31,7 +32,7 @@ router.get('/:postId', async (req, res) => {
     }
 });
 
-router.post('/update/:postId', async (req, res) => {
+router.post('/update/:postId', authMiddleware.auth, async (req, res) => {
     try {
         let body = req.body
         let postId = req.params.postId
