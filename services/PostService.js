@@ -1,11 +1,15 @@
 const Post = require('../models/Post')
 
-module.exports.store = (body) => {
-    const post = new Post({
-        title: body.title,
-        description: body.description
-    })
+module.exports.store = (request) => {
+    let newPost = {
+        title: request.body.title,
+        description: request.body.description,
+    };
 
+    if (request.file) {
+        newPost.image = request.file;
+    }
+    const post = new Post(newPost)
     return post.save()
 }
 

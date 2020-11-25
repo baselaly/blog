@@ -1,9 +1,13 @@
 const PostService = require('../services/PostService')
+const { validationResult } = require('express-validator');
 
 module.exports.store = async (req, res) => {
     try {
-        let body = req.body
-        let newPost = await PostService.store(body);
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(422).json({ errors: errors.array() });
+        }
+        let newPost = await PostService.store(req);
         res.json({ post: newPost })
     } catch (err) {
         res.json({ message: err })
@@ -31,6 +35,10 @@ module.exports.view = async (req, res) => {
 
 module.exports.update = async (req, res) => {
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(422).json({ errors: errors.array() });
+        }
         let body = req.body
         let postId = req.params.postId
         let post = await PostService.update(postId, body);

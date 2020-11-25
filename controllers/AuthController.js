@@ -1,7 +1,5 @@
 
 const UserService = require('../services/UserService')
-const LoginRequest = require('../requests/auth/loginRequest')
-const RegisterRequest = require('../requests/auth/RegisterRequest')
 const { validationResult } = require('express-validator');
 
 module.exports.register = async (req, res) => {
