@@ -1,27 +1,10 @@
 const express = require('express')
 const router = express.Router()
-const UserService = require('../services/UserService')
+const AuthController = require('../controllers/AuthController')
+const LoginRequest = require('../requests/auth/loginRequest')
+const RegisterRequest = require('../requests/auth/RegisterRequest')
 
-
-router.post('/register', async (req, res) => {
-    try {
-        let body = req.body
-        let user = await UserService.register(body)
-        res.json({ user: user })
-    } catch (error) {
-        res.json({ message: error })
-    }
-})
-
-router.post('/login', async (req, res) => {
-    try {
-        let body = req.body
-        let token = await UserService.login(body)
-        res.json({ token: token })
-    } catch (error) {
-        res.json({ message: error })
-    }
-
-})
+router.post('/register', RegisterRequest, AuthController.register)
+router.post('/login', LoginRequest, AuthController.login)
 
 module.exports = router
