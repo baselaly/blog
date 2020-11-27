@@ -4,11 +4,9 @@ module.exports.store = (request) => {
     let newPost = {
         title: request.body.title,
         description: request.body.description,
+        image: request.file
     };
 
-    if (request.file) {
-        newPost.image = request.file;
-    }
     const post = new Post(newPost)
     return post.save()
 }

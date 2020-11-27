@@ -12,16 +12,14 @@ function makeid(length) {
 }
 
 function setImage(file) {
-    let buffer = file.buffer
-    let fileName = makeid(5) + '-' + file.originalname
-    fs.writeFile('./uploads/posts/' + fileName, buffer, 'binary', function (err) {
-        if (err) throw err
-    })
-    return fileName
-}
-
-function getImage(image) {
-    return 'test'
+    if (file) {
+        let buffer = file.buffer
+        let fileName = makeid(5) + '-' + file.originalname
+        fs.writeFile('./uploads/posts/' + fileName, buffer, 'binary', function (err) {
+            if (err) throw err
+        })
+        return fileName
+    }
 }
 
 const PostSchema = mongoose.Schema({
@@ -37,7 +35,6 @@ const PostSchema = mongoose.Schema({
         required: false,
         type: String,
         set: setImage,
-        get: getImage
     }
 });
 

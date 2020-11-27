@@ -4,9 +4,7 @@ const authMiddleware = require('../middlewares/auth')
 const PostController = require('../controllers/PostController')
 const StoreRequest = require('../requests/post/StoreRequest')
 const UpdateRequest = require('../requests/post/UpdateRequest')
-const multer = require('multer')
-const storage = multer.memoryStorage();
-const uploadMiddleware = multer({ storage: storage })
+const uploadMiddleware = require('../config/file.upload')
 
 router.post('/', uploadMiddleware.single('image'), StoreRequest, PostController.store);
 router.get('/', authMiddleware, PostController.index);
