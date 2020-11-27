@@ -39,9 +39,8 @@ module.exports.update = async (req, res) => {
         if (!errors.isEmpty()) {
             return res.status(422).json({ errors: errors.array() });
         }
-        let body = req.body
         let postId = req.params.postId
-        let post = await PostService.update(postId, body);
+        let post = await PostService.update(postId, req);
         res.json({ post: post })
     } catch (err) {
         res.json({ message: err })

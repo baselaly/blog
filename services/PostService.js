@@ -1,3 +1,4 @@
+const { request } = require('express');
 const Post = require('../models/Post')
 
 module.exports.store = (request) => {
@@ -19,11 +20,14 @@ module.exports.getById = (id) => {
     return Post.findById(id)
 }
 
-module.exports.update = (id, body) => {
-    return Post.updateOne({ _id: id }, {
-        $set: {
-            title: body.title,
-            description: body.description
-        }
-    })
+module.exports.update = (id, request) => {
+    let newData = {
+        title: request.body.title,
+        description: request.body.description,
+    }
+
+    if (request.file) {
+        newData.image = request.file;
+    }
+    return Post.updateOne({ _id: id }, { $set: newData })
 }
