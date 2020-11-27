@@ -1,19 +1,20 @@
 const bcrypt = require('bcrypt');
 const salt = 10;
 const jwt = require('jsonwebtoken');
+const mailer = require('../config/mailer')
 
 require('dotenv/config');
 
 const User = require('../models/User')
 
-module.exports.register = (body) => {
-    const user = new User({
+module.exports.register = async (body) => {
+    const user = await User.create({
         username: body.username,
         email: body.email,
         password: bcrypt.hashSync(body.password, salt)
     })
-
-    return user.save()
+    mailer({ from: "blogApp@blog.com", to: user.email, subject: "welcome Mail", text: "Welcome To Your Blog!" })
+    return user
 }
 
 module.exports.login = async (body) => {
