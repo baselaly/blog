@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt');
 const salt = 10;
 const jwt = require('jsonwebtoken');
 const mailer = require('../config/mailer')
-
 require('dotenv/config');
 
 const User = require('../models/User')
@@ -27,4 +26,16 @@ module.exports.login = async (body) => {
     return jwt.sign({ user }, process.env.JWT_SECRET, {
         expiresIn: 86400 // expires in 24 hours
     });
+}
+
+module.exports.getAuthenticatedUser = (req) => {
+    // Gather the jwt access token from the request header
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    if (token == null) return null
+
+    return jwt.verify(token, process.env.JWT_SECRET, (err, auth) => {
+        if (err) return null
+        return auth.user
+    })
 }

@@ -1,4 +1,5 @@
 const PostService = require('../services/PostService')
+const UserService = require('../services/UserService')
 const { validationResult } = require('express-validator');
 
 module.exports.store = async (req, res) => {
@@ -7,6 +8,8 @@ module.exports.store = async (req, res) => {
         if (!errors.isEmpty()) {
             return res.status(422).json({ errors: errors.array() });
         }
+        let authenticatedUser = UserService.getAuthenticatedUser(req)
+        req.body.user_id = authenticatedUser._id;
         let newPost = await PostService.store(req);
         res.json({ post: newPost })
     } catch (err) {
