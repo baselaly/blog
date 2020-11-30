@@ -22,6 +22,10 @@ function setImage(file) {
     }
 }
 
+function getImage(image) {
+    return image
+}
+
 const PostSchema = mongoose.Schema({
     title: {
         required: true,
@@ -35,6 +39,7 @@ const PostSchema = mongoose.Schema({
         required: false,
         type: String,
         set: setImage,
+        get: getImage,
     },
     user: {
         required: true,
@@ -42,5 +47,8 @@ const PostSchema = mongoose.Schema({
         ref: 'Users'
     }
 });
+
+PostSchema.set('toObject', { getters: true });
+PostSchema.set('toJSON', { getters: true });
 
 module.exports = mongoose.model('Posts', PostSchema)

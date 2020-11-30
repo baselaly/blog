@@ -19,7 +19,8 @@ module.exports.store = async (req, res) => {
 
 module.exports.index = async (req, res) => {
     try {
-        let posts = await PostService.get()
+        let authenticatedUser = UserService.getAuthenticatedUser(req)
+        let posts = await PostService.getBy({ user: authenticatedUser._id })
         res.json({ posts: posts })
     } catch (err) {
         res.json({ message: err })
@@ -29,7 +30,9 @@ module.exports.index = async (req, res) => {
 module.exports.view = async (req, res) => {
     try {
         let id = req.params.postId
-        const post = await PostService.getById(id)
+        let authenticatedUser = UserService.getAuthenticatedUser(req)
+        const post = await PostService.getSingleBy({ _id: id, user: authenticatedUser._id })
+        if (!post) return res.status(404).json({ message: "Not Found" })
         res.json({ post: post })
     } catch (err) {
         res.json({ message: err })
@@ -43,6 +46,9 @@ module.exports.update = async (req, res) => {
             return res.status(422).json({ errors: errors.array() });
         }
         let postId = req.params.postId
+        let authenticatedUser = UserService.getAuthenticatedUser(req)
+        const userPost = await PostService.getSingleBy({ _id: postId, user: authenticatedUser._id })
+        if (!userPost) return res.status(404).json({ message: "Not Found" })
         let post = await PostService.update(postId, req);
         res.json({ post: post })
     } catch (err) {

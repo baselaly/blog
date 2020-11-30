@@ -1,4 +1,3 @@
-const { request } = require('express');
 const Post = require('../models/Post')
 
 module.exports.store = async (request) => {
@@ -13,12 +12,12 @@ module.exports.store = async (request) => {
     return await post.save()
 }
 
-module.exports.get = async () => {
-    return await Post.find().populate('user', 'username')
+module.exports.getBy = async (filters) => {
+    return await Post.find(filters).populate('user', 'username')
 }
 
-module.exports.getById = async (id) => {
-    return await Post.findOne({ _id: id }).populate('user', 'username')
+module.exports.getSingleBy = async (filters) => {
+    return await Post.findOne(filters).populate('user', 'username')
 }
 
 module.exports.update = async (id, request) => {
@@ -30,5 +29,5 @@ module.exports.update = async (id, request) => {
     if (request.file) {
         newData.image = request.file;
     }
-    return await Post.updateOne({ _id: id }, { $set: newData })
+    return await Post.findByIdAndUpdate(id, { $set: newData })
 }
